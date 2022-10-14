@@ -1,0 +1,10 @@
+{
+    "FOV" : 74,
+    "CASC_PATH" : "./haarcascade_frontalface_default.xml",
+    "SAVED_FRAMES" : 10,
+    "SCALE_FACTOR" : 1.1,
+    "MIN_NEIGHBORS" : 4,
+    "MIN_SIZE" : 100,
+    "LOSS_CAP" : 10 
+}
+
