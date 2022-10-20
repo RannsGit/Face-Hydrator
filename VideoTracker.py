@@ -5,17 +5,12 @@ from tools import *
 
 class VideoTracker:
 
-    # Tracking
-    
-    LOSS_CAP = 10  
-
     def __init__(self, cascade_path: str, camera_fov: str, camera_index: int=0) -> None:
 
         # Get Constants form JSON
         self.SAVED_FRAMES, self.SCALE_FACTOR, self.MIN_NEIGHBORS, self.MIN_SIZE,\
         self.LOSS_CAP = jsonGet("SAVED_FRAMES", "SCALE_FACTOR", 
                                 "MIN_NEIGHBORS", "MIN_SIZE", "LOSS_CAP")
-
 
        # Setup Classifier
         self.cascade = cv2.CascadeClassifier(cascade_path)
@@ -40,7 +35,6 @@ class VideoTracker:
 
         # Display parameters
         print(
-
             "-"*15, "\n"
             "VideoTracker init\n"
             f"  - Cascade Path: {cascade_path}\n"
@@ -49,7 +43,6 @@ class VideoTracker:
             f"  - Video Width: {videoShape[1]}\n",
             "-"*15, "\n",
             sep=''
-
         )
 
 

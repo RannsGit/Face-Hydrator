@@ -10,14 +10,17 @@ DEBUG = True
 import json
 from datetime import datetime
 
+# Open log into memory
 log = open('log.txt', 'w')
 
 def debug(note, color='') -> None:
+    """Colored print for debug"""
 
+    # Do nothing when debug is disabled
     if not DEBUG: return
 
+    # Get color
     ENDC = '\033[0m'
-
     code = ('', '')
     if color == "red":
         code = ('\033[91m', ENDC)
@@ -28,7 +31,10 @@ def debug(note, color='') -> None:
     elif color == "yellow":
         code = ('\033[93m', ENDC)
 
+    # Print with color
     print(f"{code[0]}{note}{code[1]}")
+
+    # Log to log.txt
     log.write(f"{datetime.now()} ->\t{note}\n")
 
 def jsonGet(*args) -> list:
@@ -56,6 +62,7 @@ def jsonGet(*args) -> list:
 
 
 class Aimer:
+    """Aim at point from coordinate on screen."""
     
     def __init__(self, name, fov, clen) -> None:
 
@@ -75,7 +82,8 @@ class Aimer:
             sep=''
         )
 
-    def get_angle(self, point):
+    def get_angle(self, point) -> float:
+        """Get of angle to point from center of camera."""
         f = self.fov
         p = point 
         l = self.clen 
@@ -85,13 +93,15 @@ class Aimer:
         return round(t, 2)
 
 class Rectangle:
+    """Stores position and size attributes for rectangular objects."""
     def __init__(self, w=0, h=0, x=0, y=0) -> None:
         self.w = w 
         self.h = h 
         self.x = x 
         self.y = y
 
-    def set(self, x, y, w, h):
+    def set(self, x, y, w, h) -> None:
+        """Bulk set attributes."""
         self.w = w
         self.h = h
         self.x = x
