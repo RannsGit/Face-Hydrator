@@ -12,7 +12,7 @@ class Aimer:
     """Aim at point from coordinate on screen."""
 
     ANGLE_FILE = jsonGet("ANGLE_FILE")
-    XOFFSET = 0     # X axis offset
+    XOFFSET = 90     # X axis offset
     YOFFSET = 90    # Y axis offset
     
     def __init__(self, fov:int, xLen:int, yLen:int) -> None:

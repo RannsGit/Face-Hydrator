@@ -233,7 +233,7 @@ class VideoTracker:
         cv2.putText(
             image,
             text=f"yTarget angle: {yTarget}",
-            org=(10, 40),
+            org=(10, 80),
             fontFace=cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=1,
             color=(0, 0, 255),
@@ -250,7 +250,7 @@ class VideoTracker:
         )
         
         # -- Send angle to aimer --
-        self.aimer.aim(0, xTarget)
+        self.aimer.aim(yTarget, xTarget)
 
 
         # Display the resulting frame

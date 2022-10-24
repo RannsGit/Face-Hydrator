@@ -49,7 +49,7 @@ class ServoHost:
             try:
                 # Split csv 
                 x, y = contents.split(",")
-            except TypeError:
+            except ValueError:
                 # If not enough values are recognized
                 print("ServoHost: read(): Invalid File: Cannot unpack")
                 return None
