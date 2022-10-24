@@ -1,6 +1,7 @@
 import cv2 
 import numpy as np
 from LogQueue import LogQueue
+from Aimer import Aimer
 from tools import *
 
 class VideoTracker:
@@ -25,7 +26,7 @@ class VideoTracker:
         videoShape = self.get_image().shape
 
         # Setup Aimer
-        self.horizAim = Aimer(name="horiz", fov=camera_fov, clen=videoShape[1])
+        self.aimer = Aimer(name="horiz", fov=camera_fov, clen=videoShape[1])
 
         # Store last predicted triangle
         self.predicted = Rectangle()
@@ -217,7 +218,7 @@ class VideoTracker:
 
         # -- Get & Display Target Angle -- 
 
-        targetAngle = self.horizAim.get_angle(u.x)
+        targetAngle = self.aimer.get_angle(u.x)
         cv2.putText(
             image,
             text=f"Target angle: {targetAngle}",
@@ -236,6 +237,9 @@ class VideoTracker:
             color=(0, 0, 255),
             thickness=2
         )
+        
+        # -- Send angle to aimer --
+        self.aimer.aim(0, targetAngle)
 
 
         # Display the resulting frame

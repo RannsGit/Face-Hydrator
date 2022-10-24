@@ -61,37 +61,6 @@ def jsonGet(*args) -> list:
     return parameters
 
 
-class Aimer:
-    """Aim at point from coordinate on screen."""
-    
-    def __init__(self, name, fov, clen) -> None:
-
-        # Setup Camera Parameters
-        self.name = name
-        self.fov = fov 
-        self.clen = clen
-
-        # Display parameters
-        print(
-            "-"*15, "\n"
-            "Aimer init\n"
-            f"  - Name: {name}\n"
-            f"  - Field of View: {fov}\n"
-            f"  - clen: {clen}\n",
-            "-"*15, "\n",
-            sep=''
-        )
-
-    def get_angle(self, point) -> float:
-        """Get of angle to point from center of camera."""
-        f = self.fov
-        p = point 
-        l = self.clen 
-
-        t = (l * f - 2 * p * f) / (2 * l)
-
-        return round(t, 2)
-
 class Rectangle:
     """Stores position and size attributes for rectangular objects."""
     def __init__(self, w=0, h=0, x=0, y=0) -> None:
