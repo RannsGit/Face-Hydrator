@@ -1,19 +1,32 @@
-from tools import debug
+"""
+Kyle Tennison
+October 24, 2022
+
+Aimer. Updates positions in ANGLEFILE to reflect the desired servo angles.
+Called from VideoTracker."""
+
+
+from tools import *
 
 class Aimer:
     """Aim at point from coordinate on screen."""
 
-    ANGLEFILE = "../Arduino/status.txt"
-
-    XOFFSET = 0
-    YOFFSET = 90
+    ANGLE_FILE = jsonGet("ANGLE_FILE")
+    XOFFSET = 0     # X axis offset
+    YOFFSET = 90    # Y axis offset
     
-    def __init__(self, name, fov, clen) -> None:
+    def __init__(self, fov:int, xLen:int, yLen:int) -> None:
+        """Setup aimer:
+        Parameters:
+            fov (int)   - Camera FOV
+            xLen (int) - x-length of image (pixels)
+            yLen (int) - y-length of image (pixels)
+            """
 
         # Setup Camera Parameters
-        self.name = name
         self.fov = fov 
-        self.clen = clen
+        self.xLen = xLen
+        self.yLen = yLen
 
         # Save valid last angles
         self.lastX = 0
@@ -23,18 +36,21 @@ class Aimer:
         print(
             "-"*15, "\n"
             "Aimer init\n"
-            f"  - Name: {name}\n"
             f"  - Field of View: {fov}\n"
-            f"  - clen: {clen}\n",
+            f"  - xLen: {xLen}\n",
+            f"  - yLen: {yLen}\n",
             "-"*15, "\n",
             sep=''
         )
 
-    def get_angle(self, point) -> float:
-        """Get of angle to point from center of camera."""
+    def get_angle(self, point, axis) -> float:
+        """Get of angle to point from center of camera.
+        Parameters:
+            point: Coordinate of point on axis
+            axis:  axis ID of choice"""
         f = self.fov
         p = point 
-        l = self.clen 
+        l = self.xLen if axis == 0xA else self.yLen
 
         t = -(l * f - 2 * p * f) / (2 * l)
 
@@ -67,7 +83,7 @@ class Aimer:
         else:
             self.lastY = y
         
-        with open(self.ANGLEFILE, 'w') as file:
+        with open(self.ANGLE_FILE, 'w') as file:
             file.write(f"{x},{y}")
         debug(f"Aimed with position {x}, {y}.")
 

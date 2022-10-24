@@ -10,6 +10,10 @@ DEBUG = True
 import json
 from datetime import datetime
 
+# ID for delimiting x & y axes
+XAXIS = 0xA
+YAXIS = 0xB
+
 # Open log into memory
 log = open('log.txt', 'w')
 
@@ -37,12 +41,13 @@ def debug(note, color='') -> None:
     # Log to log.txt
     log.write(f"{datetime.now()} ->\t{note}\n")
 
-def jsonGet(*args) -> list:
+def jsonGet(*args) -> any:
     """Get parameter from JSON.
     Arguments:
         *args: JSON keys to get
     Returns: 
-        (list) Corresponding json values."""
+        (list) Corresponding json values.
+        (any)  If only one value in list, return that value"""
 
     parameters = []
 
@@ -58,11 +63,16 @@ def jsonGet(*args) -> list:
         except KeyError: 
             raise KeyError(f"JSON parameter {arg} does not exist.")
 
+    # Return value of parameter if only one
+    if len(parameters) == 1:
+        return parameters[0]
+
     return parameters
 
 
 class Rectangle:
     """Stores position and size attributes for rectangular objects."""
+    
     def __init__(self, w=0, h=0, x=0, y=0) -> None:
         self.w = w 
         self.h = h 

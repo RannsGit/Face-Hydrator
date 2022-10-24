@@ -26,7 +26,8 @@ class VideoTracker:
         videoShape = self.get_image().shape
 
         # Setup Aimer
-        self.aimer = Aimer(name="horiz", fov=camera_fov, clen=videoShape[1])
+        self.aimer = Aimer(fov=camera_fov, xLen=videoShape[1],
+                           yLen=videoShape[0])
 
         # Store last predicted triangle
         self.predicted = Rectangle()
@@ -218,10 +219,20 @@ class VideoTracker:
 
         # -- Get & Display Target Angle -- 
 
-        targetAngle = self.aimer.get_angle(u.x)
+        xTarget = self.aimer.get_angle(u.x, XAXIS)
+        yTarget = self.aimer.get_angle(u.y, YAXIS)
         cv2.putText(
             image,
-            text=f"Target angle: {targetAngle}",
+            text=f"xTarget angle: {xTarget}",
+            org=(10, 40),
+            fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+            fontScale=1,
+            color=(0, 0, 255),
+            thickness=2
+        )
+        cv2.putText(
+            image,
+            text=f"yTarget angle: {yTarget}",
             org=(10, 40),
             fontFace=cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=1,
@@ -231,7 +242,7 @@ class VideoTracker:
         cv2.putText(
             image,
             text=f"Loss Count: {self.lossCount}",
-            org=(10, 80),
+            org=(10, 120),
             fontFace=cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=1,
             color=(0, 0, 255),
@@ -239,7 +250,7 @@ class VideoTracker:
         )
         
         # -- Send angle to aimer --
-        self.aimer.aim(0, targetAngle)
+        self.aimer.aim(0, xTarget)
 
 
         # Display the resulting frame
