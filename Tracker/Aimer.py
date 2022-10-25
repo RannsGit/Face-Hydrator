@@ -61,8 +61,13 @@ class Aimer:
 
         return round(t, 2)
 
-    def aim(self, x, y):
-        """Update aimer file to newest position"""
+    def aim(self, x, y, valid=False) -> None:
+        """Update aimer file to newest position:
+        Parameters:
+            x (int)     - X angle to aim
+            y (int)     - Y angle to aim
+            valid (bool)- Frame validity; used to switch relay.
+            """
         assert all([isinstance(i, (int, float)) for i in (x,y)]), \
             "Cannot aim non-numeric type"
 
@@ -87,10 +92,13 @@ class Aimer:
             y = self.lastY
         else:
             self.lastY = y
+
+        # Convert validity bool to int
+        v = 1 if valid else 0
         
         with open(self.ANGLE_FILE, 'w') as file:
-            file.write(f"{x},{y}")
-        debug(f"Aimed with position {x}, {y}.")
+            file.write(f"{x},{y},{v}")
+        debug(f"Aimed with position {x}, {y}. Relay set to: {v}")
 
 
 if __name__ == "__main__":

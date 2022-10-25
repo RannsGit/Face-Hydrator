@@ -250,7 +250,7 @@ class VideoTracker:
         )
         
         # -- Send angle to aimer --
-        self.aimer.aim(yTarget, xTarget)
+        self.aimer.aim(yTarget, xTarget, valid)
 
 
         # Display the resulting frame

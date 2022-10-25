@@ -19,7 +19,8 @@ class ServoHost:
         """Setup serial connection with arduino.
         Post: 
             May exit program! If PORT is invalid, program will exit."""
-        self.previous = (0, 0)
+        self.prevPos = (0, 0)
+        self.prevValid = False
         try:    
             self.arduino = serial.Serial(port=self.PORT, baudrate=9600)
         except serial.serialutil.SerialException:
@@ -30,10 +31,10 @@ class ServoHost:
     def isUpdate(self) -> bool:
         """Check if there have been any changes in the file to avoid 
         unnecessary updates"""
-        if self.previous == self.read():
+        if self.prevPos == self.read():
             return False 
         else:
-            self.previous = self.read()
+            self.prevPos = self.read()
             return True
     
     @classmethod
@@ -48,7 +49,7 @@ class ServoHost:
 
             try:
                 # Split csv 
-                x, y = contents.split(",")
+                x, y, v = contents.split(",")
             except ValueError:
                 # If not enough values are recognized
                 print("ServoHost: read(): Invalid File: Cannot unpack")
@@ -58,14 +59,15 @@ class ServoHost:
                     # Convert fields to integer
                     x = int(float(x))  # Convert to float to avoid ValueError for 
                     y = int(float(y))  #    long decimal numbers.
+                    v = int(v) == 1    # Convert validity to bool
                 except ValueError:
                     # If fields contain alien type
                     print("ServoHost: read(): Invalid File: Cannot read type")
                     return None
-            return x, y
+            return x, y, v
 
         
-    def send(self, b1: int, b2: int) -> None:
+    def send(self, b1: int, b2: int, b3: int) -> None:
         """Send data to arduino.
         Parameters:
             b1 (int)    - First byte to send (NOT HEADER)
@@ -76,6 +78,7 @@ class ServoHost:
         # Add bytes to packet
         packet.append(b1)
         packet.append(b2)
+        packet.append(b3)
 
         # Send packet
         self.arduino.write(packet) 
@@ -96,8 +99,22 @@ class ServoHost:
                 if r is None:
                     continue
                 else:
-                    b1, b2 = r
-                self.send(b1, b2)
+                    b1, b2, v = r
+
+                    # Get matching byte for relay
+                    if v == self.prevValid:
+                        b3 = 0xEE
+                    else:
+                        b3 = 0xE0 if v else 0x0E
+                        self.prevValid = v
+
+                print("sending packet: ")
+                for byte in (b1, b2, b3):
+                    print("Sending :", hex(byte))
+
+
+                self.send(b1, b2, b3)
+                print("-" * 15)
             else:
                 time.sleep(0.01)
 

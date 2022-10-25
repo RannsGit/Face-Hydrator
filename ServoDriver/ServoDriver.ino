@@ -1,6 +1,7 @@
 #include <Servo.h>
 #define XSERVO_PIN 3
 #define YSERVO_PIN 6
+#define RELAY_PIN 2
 #define HEADER 0xAA
 #define DEBUG true
 
@@ -41,7 +42,7 @@ void goTo(Servo &servo, int real, int goal){
             servo.write(i);
             }
     }
-    else{ // if decreasing
+    else{ 
         for(int i=real; i > goal; i--){
             delay(1);
             servo.write(i);
@@ -85,6 +86,35 @@ void aim(bool axis){
 
 }
 
+void relay(byte rbyte){
+    /*
+    relay(rbyte) -> void
+    Parameters:
+        rbyte (byte) - Signal byte for relay.
+        
+    Accepted signal bytes:
+        0x0E - Disconnect relay
+        0xE0 - Connect relay*
+        0xEE (or any other) - Continue with previous relay state
+
+    Post: 
+        Changes output of RELAY_PIN
+        */
+    
+    if (rbyte == 0x0E){
+        Serial.println("disconnect relay");
+        digitalWrite(RELAY_PIN, LOW);
+    }
+    else if (rbyte == 0xE0){
+        Serial.println("connect relay");
+        digitalWrite(RELAY_PIN, HIGH);
+    }
+    else{
+        Serial.print("Unknown byte ");
+        Serial.println(rbyte, HEX);
+    }
+}
+
 void setup(){
     // Start Serial
     Serial.begin(9600);
@@ -92,6 +122,10 @@ void setup(){
     // Initialize servos
     xservo.attach(XSERVO_PIN);
     yservo.attach(YSERVO_PIN);
+
+    // Setup relay
+    pinMode(RELAY_PIN, OUTPUT);
+    digitalWrite(RELAY_PIN, LOW);
 }
 
 void loop(){
@@ -117,9 +151,14 @@ void loop(){
             xgoal = Serial.read();
             ygoal = Serial.read();
 
+            // Get relay status from packet
+            byte relayIncoming = Serial.read();
+
             // Aim for both axes
             aim(true);
             aim(false);
+
+            relay(relayIncoming);
         }
     }
 }
