@@ -24,4 +24,3 @@ YSCLAE          : Scale factor for Y axis; used for tuning
 
 CL              : Confidence level for linear correlation
 TOLERANCE       : Tolerance for outliers [Percent tolerance, Pixel tolerance]
-CRIT_R          : 

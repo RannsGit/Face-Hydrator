@@ -63,8 +63,7 @@ class LogQueue:
         return derived
 
 
-    @classmethod
-    def isLinearCorrelation(cls, _array: list):
+    def isLinearCorrelation(self, _array: list):
         """Tests if there is significant linear correlation"""
 
         # Check for all equal values
@@ -85,7 +84,7 @@ class LogQueue:
 
         debug(f"Linear correlation p-value {p}", "blue")
 
-        return p < 1 - cls.CL
+        return p < 1 - self.CL
  
     @staticmethod
     def regress(_array: list):

@@ -10,8 +10,8 @@
     "ANGLE_FILE" : "../ServoDriver/status.txt",
     "XOFFSET" : 90,
     "YOFFSET" : 90,
-    "XSCALE" : 1.1,
-    "YSCALE" : 1,
+    "XSCALE" : 1.0,
+    "YSCALE" : 1.1,
 
     "CL" : 0.70,
     "TOLERANCE" : [50, 0.15]

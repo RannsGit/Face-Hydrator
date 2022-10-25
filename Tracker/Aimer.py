@@ -57,7 +57,7 @@ class Aimer:
         l = self.xLen if axis == 0xA else self.yLen
 
         t = (-(l * f - 2 * p * f) / (2 * l)) * \
-            self.XSCALE if axis == 0xA else self.YSCALE
+            (self.XSCALE if axis == 0xA else self.YSCALE)
 
         return round(t, 2)
 

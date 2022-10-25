@@ -13,15 +13,6 @@ int ygoal;  // Desired y angle
 int xangle; // Current x angle
 int yangle; // Current y angle
 
-void setup(){
-    // Start Serial
-    Serial.begin(9600);
-
-    // Initialize servos
-    xservo.attach(XSERVO_PIN);
-    yservo.attach(YSERVO_PIN);
-}
-
 
 void goTo(Servo &servo, int real, int goal){
     /*
@@ -94,6 +85,14 @@ void aim(bool axis){
 
 }
 
+void setup(){
+    // Start Serial
+    Serial.begin(9600);
+
+    // Initialize servos
+    xservo.attach(XSERVO_PIN);
+    yservo.attach(YSERVO_PIN);
+}
 
 void loop(){
 
