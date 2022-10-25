@@ -156,7 +156,12 @@ class LogQueue:
         canRegressVelocity = self.isLinearCorrelation(velocities)
 
         # ---- IF GOOD FIT FOR VELOCITY ----
-        if canRegressVelocity:
+
+        # DO NOT REGRESS DERIVATIVE
+        if False:
+
+
+        # if canRegressVelocity:
             debug("Regressing Velocity", "green")
             # Regress derivative to project velocities
             projectedVelocities = []

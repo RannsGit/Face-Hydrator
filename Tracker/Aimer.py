@@ -14,6 +14,10 @@ class Aimer:
     ANGLE_FILE = jsonGet("ANGLE_FILE")
     XOFFSET = 90     # X axis offset
     YOFFSET = 90    # Y axis offset
+
+    ANGLE_FILE, XOFFSET, YOFFSET, XSCALE, YSCALE = jsonGet(
+        "ANGLE_FILE", "XOFFSET", "YOFFSET", "XSCALE", "YSCALE"
+    )
     
     def __init__(self, fov:int, xLen:int, yLen:int) -> None:
         """Setup aimer:
@@ -52,7 +56,8 @@ class Aimer:
         p = point 
         l = self.xLen if axis == 0xA else self.yLen
 
-        t = -(l * f - 2 * p * f) / (2 * l)
+        t = (-(l * f - 2 * p * f) / (2 * l)) * \
+            self.XSCALE if axis == 0xA else self.YSCALE
 
         return round(t, 2)
 
