@@ -1,4 +1,7 @@
 """
+Kyle Tennison
+October 25, 2022
+
 Log/Queue for recent frames. Allows estimation for future points and 
 outlier analysis."""
 
@@ -9,11 +12,11 @@ from tools import *
 
 class LogQueue:
 
-    CL = 0.70  # Confidence level for interval
-    TOLERANCE = (50, 0.15)  # (Pixel allowance, Percent of stdev allowance)
-    CRIT_R = 0.98769  # Critical r for 10% correlation
-
     def __init__(self, max_size, log=None, name="unnamed", min_size=5) -> None:
+
+        self.CL, self.TOLERANCE = jsonGet(
+            "CL", "TOLERANCE"
+        )
 
         self.max_size: int = max_size
         self.min_size: int = min_size
