@@ -226,55 +226,18 @@ class LogQueue:
     def isOutlier(self, value):
         """Determines if a value is an outlier that should be ignored"""
 
-        log = self.get_log()  # Save space
-
-
         if not self._valid_length(): return False
 
-       
-        # # Check for regression
-        # if self.isLinearCorrelation(log):
-
-        #     debug("Regression = TRUE", 'green')
-        #     debug(self)
-            
-        #     # Create function of best fit
-        #     f = self.regress(log)
-        #     x = len(log)
-
-        #     # Create validation interval
-        #     err = stat.tstd(log) * self.TOLERANCE[1] +self.TOLERANCE[0]
-        #     vi = (f(x) - err, f(x) + err)
-
-        #     debug(
-        #         f"{self.name}: Regression interval:\t{vi}", "green")
-
-
-        # else:
-            
-        #     debug("Regression = FALSE")
-       
-        #     # Create confidence interval
-        #     ci = stat.t.interval(
-        #         confidence=self.CL, 
-        #         df=len(log) - 1,
-        #         loc=np.mean(log),
-        #         scale=stat.sem(log))
-
-        #     # Create validation interval
-        #     err = stat.tstd(log) * self.TOLERANCE[1] +self.TOLERANCE[0]
-        #     vi = (ci[0] - err, ci[1] + err)
-
-        #     debug(f"{self.name}: Mean interval:\t{vi}")
-
+        # Get projected value
         projected = self.get_next_values(n=1)[0]
+        
+        # Create confidence interval
         err = projected * self.TOLERANCE[1] + self.TOLERANCE[0]
         vi = (
             projected - err, projected + err
         )
 
-        # Validate
-
+        # Validate with interval
         if vi[0] <= value <= vi[1]:
             return False  # Not an outlier 
         else:

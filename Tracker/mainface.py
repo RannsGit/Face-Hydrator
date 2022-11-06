@@ -1,5 +1,5 @@
 """
-The Face Hydrator; Innovation Awaits
+The Face Hydrator
 
 Kyle Tennison
 October 13, 2022
